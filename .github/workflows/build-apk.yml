@@ -39,6 +39,19 @@ jobs:
       - name: Generate Android project
         run: flutter create --project-name radio_dewi_anjani --org id.radiodewianjani --platforms=android .
 
+      - name: Enable internet access for Android release
+        run: |
+          python3 - <<'PYCODE'
+          from pathlib import Path
+
+          manifest = Path('android/app/src/main/AndroidManifest.xml')
+          text = manifest.read_text()
+          permission = '<uses-permission android:name="android.permission.INTERNET" />'
+          if 'android.permission.INTERNET' not in text:
+              text = text.replace('<application', permission + '\n    <application', 1)
+              manifest.write_text(text)
+          PYCODE
+
       - name: Install dependencies
         run: flutter pub get
 
