@@ -1,0 +1,31 @@
+
+name: Extract Flutter Project
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Extract Flutter ZIP
+        run: |
+          set -e
+          mkdir -p extracted
+          unzip -q Radio_Dewi_Anjani001.zip -d extracted
+
+          echo "=== HASIL EKSTRAKSI ==="
+          find extracted -maxdepth 3 -type f | sort
+
+      - name: Upload Extracted Project
+        uses: actions/upload-artifact@v4
+        with:
+          name: flutter-project-extracted
+          path: extracted/
